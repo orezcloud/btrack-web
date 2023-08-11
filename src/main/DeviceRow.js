@@ -87,7 +87,7 @@ const DeviceRow = ({data, index, style}) => {
                 onClick={() => dispatch(devicesActions.selectId(item.id))}
                 disabled={!admin && item.disabled}
                 style={{
-                    backgroundColor: devices?.selectedId === item.id ? 'green': 'white'
+                    backgroundColor: devices?.selectedId === item.id ? 'rgba(0,165,239,0.5)': 'white'
                 }}
             >
                 <ListItemAvatar>

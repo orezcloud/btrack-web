@@ -31,17 +31,21 @@ const MapPositions = ({positions, onClick, showStatus, selectedPosition, titleFi
         (async () => {
 
             if (selectedId) {
-                await sleep(500);
-                setBlinkColor('primary');
-                await sleep(500);
-                setBlinkColor('medium');
-                await sleep(500);
-                setBlinkColor('primary');
-                await sleep(500);
-                setBlinkColor('medium');
-                await sleep(500);
-                setBlinkColor('primary');
-                await sleep(500);
+                await sleep(320);
+                setBlinkColor('purple');
+                await sleep(320);
+                setBlinkColor('purpleLight');
+                await sleep(320);
+                setBlinkColor('purple');
+                await sleep(320);
+                setBlinkColor('purpleLight');
+                await sleep(320);
+                setBlinkColor('purple');
+                await sleep(320);
+                setBlinkColor('purpleLight');
+                await sleep(320);
+                setBlinkColor('purple');
+                await sleep(320);
             }
 
             setBlinkColor(undefined);
@@ -80,7 +84,6 @@ const MapPositions = ({positions, onClick, showStatus, selectedPosition, titleFi
             }
         }
         // end Custom
-        console.log(selectedId === position.deviceId ? blinkColor : color)
         return {
             id: position.id,
             deviceId: position.deviceId,
