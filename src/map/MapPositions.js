@@ -1,4 +1,4 @@
-import {useId, useCallback, useEffect} from 'react';
+import {useId, useCallback, useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useMediaQuery} from '@mui/material';
 import {useTheme} from '@mui/styles';
@@ -18,12 +18,37 @@ const MapPositions = ({positions, onClick, showStatus, selectedPosition, titleFi
     const iconScale = useAttributePreference('iconScale', desktop ? 0.75 : 1);
 
     const devices = useSelector((state) => state.devices.items);
+    const selectedId = useSelector((state) => state.devices?.selectedId);
 
     const mapCluster = useAttributePreference('mapCluster', true);
     const hours12 = usePreference('twelveHourFormat');
     const directionType = useAttributePreference('mapDirection', 'selected');
+    const [blinkColor, setBlinkColor] = useState()
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    useEffect(() => {
+        (async () => {
 
-    const createFeature = (devices, position, selectedPositionId) => {
+            if (selectedId) {
+                await sleep(500);
+                setBlinkColor('primary');
+                await sleep(500);
+                setBlinkColor('medium');
+                await sleep(500);
+                setBlinkColor('primary');
+                await sleep(500);
+                setBlinkColor('medium');
+                await sleep(500);
+                setBlinkColor('primary');
+                await sleep(500);
+            }
+
+            setBlinkColor(undefined);
+        })()
+    },[selectedId])
+
+    const createFeature = (devices, selectedId,blinkColor,position, selectedPositionId) => {
         const device = devices[position.deviceId];
         let showDirection;
         switch (directionType) {
@@ -55,14 +80,14 @@ const MapPositions = ({positions, onClick, showStatus, selectedPosition, titleFi
             }
         }
         // end Custom
-
+        console.log(selectedId === position.deviceId ? blinkColor : color)
         return {
             id: position.id,
             deviceId: position.deviceId,
             name: device.name,
             fixTime: formatTime(position.fixTime, 'seconds', hours12),
             category: mapIconKey(device.category),
-            color: color,
+            color: selectedId === position.deviceId ? (blinkColor || color) : color,
             // color: showStatus ? position.attributes.color || getStatusColor(device.status) : 'neutral',
             rotation: position.course,
             direction: showDirection,
@@ -206,10 +231,10 @@ const MapPositions = ({positions, onClick, showStatus, selectedPosition, titleFi
                     type: 'Point',
                     coordinates: [position.longitude, position.latitude],
                 },
-                properties: createFeature(devices, position, selectedPosition && selectedPosition.id),
+                properties: createFeature(devices,selectedId,blinkColor, position, selectedPosition && selectedPosition.id),
             })),
         });
-    }, [mapCluster, clusters, direction, onMarkerClick, onClusterClick, devices, positions, selectedPosition]);
+    }, [mapCluster, clusters, direction,blinkColor, selectedId,onMarkerClick, onClusterClick, devices, positions, selectedPosition]);
 
     return null;
 };
