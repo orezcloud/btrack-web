@@ -59,6 +59,7 @@ const DeviceRow = ({data, index, style}) => {
 
     const item = data[index];
     const position = useSelector((state) => state.session.positions[item.id]);
+    const devices = useSelector((state) => state.devices);
 
     const devicePrimary = useAttributePreference('devicePrimary', 'name');
     const deviceSecondary = useAttributePreference('deviceSecondary', '');
@@ -85,6 +86,9 @@ const DeviceRow = ({data, index, style}) => {
                 key={item.id}
                 onClick={() => dispatch(devicesActions.selectId(item.id))}
                 disabled={!admin && item.disabled}
+                style={{
+                    backgroundColor: devices?.selectedId === item.id ? 'green': 'white'
+                }}
             >
                 <ListItemAvatar>
                     <Avatar>
